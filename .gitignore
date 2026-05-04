@@ -1,0 +1,30 @@
+# OS
+.DS_Store
+
+# env
+.env
+.env.local
+
+# dependencies
+node_modules/
+
+# builds
+dist/
+build/
+client/dist/
+client/build/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Vite / React Router
+client/.react-router/
+
+# IDE
+.vscode/
+.idea/

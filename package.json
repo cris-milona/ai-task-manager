@@ -1,0 +1,7 @@
+{
+  "name": "ai-task-manager",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel --filter ./client --filter ./server run dev"
+  }
+}

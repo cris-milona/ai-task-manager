@@ -1,43 +1,38 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
-function Home() {
-  const [input, setInput] = useState("");
-  const [result, setResult] = useState(null);
+import { ThemeProvider, CssBaseline, Box, useMediaQuery } from "@mui/material";
 
-  const sendToBackend = async () => {
-    const res = await fetch("http://localhost:3001/parse-task", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ input }),
-    });
+import { theme } from "./styles/theme";
 
-    const data = await res.json();
-    setResult(data);
-  };
-
-  return (
-    <div style={{ padding: "2rem" }}>
-      <h1>AI Task Manager</h1>
-
-      <textarea value={input} onChange={(e) => setInput(e.target.value)} />
-
-      <button onClick={sendToBackend}>Send</button>
-
-      <pre>{JSON.stringify(result, null, 2)}</pre>
-    </div>
-  );
-}
-
-function Tasks() {
-  return <h1>Tasks</h1>;
-}
+import { Home } from "./components/home/Home";
+import { Tasks } from "./components/tasks/Tasks";
+import { Sidebar } from "./components/Sidebar";
+import { Settings } from "./components/settings/Settings";
 
 export default function App() {
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const sidebarOpen = isDesktop || mobileOpen;
+
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/tasks" element={<Tasks />} />
-    </Routes>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ display: "flex", minHeight: "100vh" }}>
+        <Sidebar
+          open={sidebarOpen}
+          isDesktop={isDesktop}
+          setMobileOpen={setMobileOpen}
+        />
+        <Box sx={{ flex: 1, minWidth: 0, p: 4 }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }

@@ -6,8 +6,7 @@ The JSON must have this exact shape:
   "title": "Short title summarizing the goal",
   "subtasks": [
     { "id": "unique-id", "title": "Step title", "priority": "high" | "medium" | "low", "completed": false }
-  ],
-  "nextStep": "The single most important subtask to start with"
+  ]
 }
 
 Generate 3–6 subtasks. Assign realistic priorities. Be concise and actionable.

@@ -41,7 +41,7 @@ export const theme = createTheme({
       total: { main: "#334155", background: "#e8edf2" },
       highPriority: { main: "#ef4444", background: "#fee2e2" },
       completed: { main: "#22c55e", background: "#dcfce7" },
-      aiGenerated: { main: "#8b5cf6", background: "#e0e7ff" },
+      aiGenerated: { main: "#8b5cf6", background: "#ede9fe" },
     },
   },
   typography: {

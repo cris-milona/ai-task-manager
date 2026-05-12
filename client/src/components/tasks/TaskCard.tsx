@@ -16,7 +16,7 @@ import { Close } from "@mui/icons-material";
 
 import { SubtaskList } from "./SubtaskList";
 
-import type { Task } from "../../types/types";
+import type { Task } from "@shared/types";
 
 interface TaskCardProps {
   task: Task;

@@ -1,0 +1,22 @@
+meta {
+  name: post tasks
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3001/parse-task
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "input": "Buy groceries tomorrow at 5pm"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

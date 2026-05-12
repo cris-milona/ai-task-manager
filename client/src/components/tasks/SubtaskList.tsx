@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 
-import type { Subtask } from "../../types/types";
+import type { Subtask } from "@shared/types";
 
 interface SubtaskListProps {
   subtasks: Subtask[];

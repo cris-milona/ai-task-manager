@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import { ThemeProvider, CssBaseline, Box, useMediaQuery } from "@mui/material";
 
 import { theme } from "./styles/theme";
+import type { Task } from "@shared/types";
 
 import { Home } from "./components/home/Home";
 import { Tasks } from "./components/tasks/Tasks";
@@ -13,8 +14,13 @@ import { Settings } from "./components/settings/Settings";
 export default function App() {
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const sidebarOpen = isDesktop || mobileOpen;
+
+  const handleTaskGenerated = (task: Task) => {
+    setTasks((prev) => [...prev, task]);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -27,8 +33,13 @@ export default function App() {
         />
         <Box sx={{ flex: 1, minWidth: 0, p: 4 }}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/tasks" element={<Tasks />} />
+            <Route
+              path="/"
+              element={
+                <Home onTaskGenerated={handleTaskGenerated} tasks={tasks} />
+              }
+            />
+            <Route path="/tasks" element={<Tasks tasks={tasks} />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </Box>

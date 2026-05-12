@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "ai-task-manager",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

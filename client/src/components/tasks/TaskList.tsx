@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 
 import { TaskCard } from "./TaskCard";
 
-import type { Task } from "../../types/types";
+import type { Task } from "@shared/types";
 
 interface TaskListProps {
   tasks: Task[];

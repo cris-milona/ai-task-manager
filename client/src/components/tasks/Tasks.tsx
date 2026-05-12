@@ -2,9 +2,12 @@ import { Typography, Box, useTheme } from "@mui/material";
 
 import { TaskList } from "./TaskList";
 
-import { sampleTasks } from "../../data/tasks";
+import type { Task } from "@shared/types";
+interface TasksProps {
+  tasks: Task[];
+}
 
-export const Tasks = () => {
+export const Tasks = ({ tasks }: TasksProps) => {
   const theme = useTheme();
 
   return (
@@ -25,11 +28,10 @@ export const Tasks = () => {
           noWrap
           sx={{ color: theme.palette.text.secondary }}
         >
-          {sampleTasks.length} {sampleTasks.length === 1 ? "task" : "tasks"} to
-          complete
+          {tasks.length} {tasks.length === 1 ? "task" : "tasks"} to complete
         </Typography>
       </Box>
-      <TaskList tasks={sampleTasks} />
+      <TaskList tasks={tasks} />
     </Box>
   );
 };

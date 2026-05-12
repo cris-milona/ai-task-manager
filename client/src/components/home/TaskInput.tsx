@@ -1,4 +1,4 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useState } from "react";
 
 import {
   Paper,
@@ -8,31 +8,51 @@ import {
   Box,
   InputAdornment,
   useTheme,
+  Alert,
 } from "@mui/material";
 import { AutoAwesome as AutoAwesomeIcon } from "@mui/icons-material";
 
+import type { Task } from "@shared/types";
+
 interface TaskInputProps {
   placeholder?: string;
-  setResult: Dispatch<SetStateAction<unknown>>;
+  onTaskGenerated: (task: Task) => void;
 }
 
 export const TaskInput = ({
   placeholder = "Describe a task or goal...",
-  setResult,
+  onTaskGenerated,
 }: TaskInputProps) => {
   const theme = useTheme();
 
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const sendToBackend = async () => {
-    const res = await fetch("http://localhost:3001/parse-task", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ input }),
-    });
+  const handleGenerate = async () => {
+    if (!input.trim()) return;
 
-    const data = await res.json();
-    setResult(data);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("http://localhost:3001/parse-task", {
+        method: "POST", // ✅ POST, not GET
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input }), // ✅ sends the user's text
+      });
+
+      if (!response.ok) throw new Error("Server error");
+
+      const task: Task = await response.json();
+      onTaskGenerated(task); // ✅ sends task up to App
+      setInput(""); // clear input after success
+    } catch (err) {
+      console.error("Error generating task:", err);
+      setError("Something went wrong. Is the server running?");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -52,7 +72,7 @@ export const TaskInput = ({
       <TextField
         fullWidth
         multiline
-        minRows={2}
+        minRows={3}
         maxRows={4}
         placeholder={placeholder}
         variant="standard"
@@ -79,6 +99,11 @@ export const TaskInput = ({
         }}
         sx={{ mb: 2 }}
       />
+      {error && (
+        <Alert severity="error" sx={{ mt: 1 }}>
+          {error}
+        </Alert>
+      )}
       <Box
         sx={{
           display: "flex",
@@ -101,7 +126,8 @@ export const TaskInput = ({
           variant="contained"
           disableElevation
           startIcon={<AutoAwesomeIcon />}
-          onClick={sendToBackend}
+          onClick={handleGenerate}
+          disabled={isLoading}
           sx={{
             textTransform: "none",
             fontWeight: 600,
@@ -114,7 +140,7 @@ export const TaskInput = ({
             },
           }}
         >
-          Generate with AI
+          {isLoading ? "Generating..." : "Generate with AI"}
         </Button>
       </Box>
     </Paper>

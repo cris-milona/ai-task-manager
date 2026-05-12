@@ -2,6 +2,7 @@
   "name": "ai-task-manager",
   "private": true,
   "scripts": {
-    "dev": "pnpm --parallel --filter ./client --filter ./server run dev"
+    "dev": "pnpm --parallel --filter ./client --filter ./server run dev",
+    "clean": "pnpm --filter ./client --filter ./server run clean && rm -rf node_modules"
   }
 }

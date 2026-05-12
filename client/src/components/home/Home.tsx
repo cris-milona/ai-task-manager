@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Box, Typography, useTheme } from "@mui/material";
 import {
   Assignment,
@@ -8,25 +6,40 @@ import {
   AutoAwesome,
 } from "@mui/icons-material";
 
+import type { Task, Subtask } from "@shared/types";
+
 import { TaskInput } from "./TaskInput";
 import { StatsCard } from "./StatsCard";
 
-export const Home = () => {
+interface HomeProps {
+  tasks: Task[];
+  onTaskGenerated: (task: Task) => void;
+}
+
+export const Home = ({ tasks, onTaskGenerated }: HomeProps) => {
   const theme = useTheme();
-  const [result, setResult] = useState<unknown>(null);
 
   const stats = {
-    total: 5,
-    highPriority: 2,
-    completed: 3,
-    aiGenerated: 4,
+    total: tasks.length,
+    highPriority: tasks.filter((t) => t.priority === "High").length,
+    completed: tasks.filter((t) =>
+      t.subtasks?.every((s: Subtask) => s.completed),
+    ).length,
+    aiGenerated: tasks.length,
+  };
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
   };
 
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
-          Good morning
+          {getGreeting()}
         </Typography>
         <Typography
           variant="body2"
@@ -36,7 +49,7 @@ export const Home = () => {
         </Typography>
       </Box>
 
-      <TaskInput setResult={setResult} />
+      <TaskInput onTaskGenerated={onTaskGenerated} />
 
       <Box
         sx={{
@@ -93,7 +106,12 @@ export const Home = () => {
           }
         />
       </Box>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
+      {tasks.length === 0 && (
+        <Box sx={{ textAlign: "center", mt: 6, color: "text.secondary" }}>
+          <AutoAwesome sx={{ fontSize: 40, mb: 1 }} />
+          <Typography>Type a goal above and let AI build your plan</Typography>
+        </Box>
+      )}
     </Box>
   );
 };
